@@ -20,7 +20,7 @@ class CustomerController extends Controller
             function ($cs) {
                 $d1 = new DateTime($cs->dob);
                 $diff = now()->diff($d1);
-                $cs->age = $diff->y;
+                $cs->age = $cs->dob ? $diff->y : '-';
                 $cs->created = date('Y-m-d', strtotime($cs->created_at));
             }
 
