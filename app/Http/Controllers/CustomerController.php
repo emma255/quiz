@@ -43,16 +43,16 @@ class CustomerController extends Controller
             'photo' => 'nullable|image'
         ]);
 
+        if ($request->dob) {
+            $dob = new DateTime($request->dob);
+
+            $diff = now()->diff($dob);
+            if ($diff->y < 18) {
+                throw new Exception("Minimum age required is 18");
+            }
+        }
 
         try {
-            if ($request->dob) {
-                $dob = new DateTime($request->dob);
-
-                $diff = now()->diff($dob);
-                if ($diff->y < 18) {
-                    throw new Exception("Minimum age required is 18");
-                }
-            }
 
             $path = null;
             if ($request->photo) {
@@ -64,6 +64,7 @@ class CustomerController extends Controller
                 'message' => 'Customer registered Successfully!!'
             ]);
         } catch (\Exception $e) {
+            info($e);
             return response()->json([
                 'message' => 'Something goes wrong while registering customer!!'
             ], 500);
