@@ -25,7 +25,7 @@ class CustomerController extends Controller
             }
 
         );
-    }   
+    }
 
     /**
      * Store a newly created resource in storage.
@@ -42,12 +42,18 @@ class CustomerController extends Controller
             'dob' => 'nullable|date',
             'photo' => 'nullable|image'
         ]);
-        $dob = new DateTime($request->dob);
-        $diff = now()->diff($dob);
-        if ($diff->y < 18) {
-            throw new Exception("Minimum age required is 18");
-        }
+
+
         try {
+            if ($request->dob) {
+                $dob = new DateTime($request->dob);
+
+                $diff = now()->diff($dob);
+                if ($diff->y < 18) {
+                    throw new Exception("Minimum age required is 18");
+                }
+            }
+
             $path = null;
             if ($request->photo) {
                 $path = $request->photo->store('public/customers');
